@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- ============================================================
+     EDIT ME: page title and description (shown in Google results
+     and when you paste the link into LinkedIn or an email)
+     ============================================================ -->
+<title>Andrea Lecini — Interactive systems, real-time 3D, LLM-driven characters</title>
+<meta name="description" content="Portfolio of Andrea Lecini. Computer engineer working on game mechanics, real-time environments in Unreal Engine 5, and characters driven by language models.">
+
+<meta property="og:title" content="Andrea Lecini — Portfolio">
+<meta property="og:description" content="Game mechanics, real-time environments, and characters driven by language models.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   1. TOKENS — change colours here and the whole site follows
+   ============================================================ */
+:root{
+  --paper:#F1F1EC;
+  --panel:#FFFFFF;
+  --ink:#15171C;
+  --muted:#5C6270;
+  --line:#D6D7D0;
+
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,sans-serif;
+
+  --measure:64ch;
+  --gutter:clamp(1.25rem,5vw,5rem);
+  --rule:1px solid var(--line);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:clamp(1rem,.95rem + .2vw,1.0625rem);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:inherit}
+
+:focus-visible{
+  outline:3px solid var(--ink);
+  outline-offset:3px;
+  border-radius:2px;
+}
+
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:var(--gutter)}
+
+/* ============================================================
+   2. HERO
+   ============================================================ */
+.hero{padding-block:clamp(3.5rem,9vw,7rem) clamp(2.5rem,6vw,4.5rem)}
+
+.hero h1{
+  font-family:var(--display);
+  font-weight:800;
+  font-size:clamp(2.9rem,10vw,7.5rem);
+  line-height:.88;
+  letter-spacing:-.035em;
+  margin:0 0 1.75rem;
+  max-width:14ch;
+}
+
+.hero p{
+  font-size:clamp(1.15rem,.95rem + .8vw,1.6rem);
+  line-height:1.4;
+  max-width:34ch;
+  margin:0 0 2.5rem;
+  color:var(--ink);
+}
+
+.meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem 2rem;
+  font-size:.9rem;
+  color:var(--muted);
+  border-top:var(--rule);
+  padding-top:1.25rem;
+}
+.meta a{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.meta a:hover{text-decoration-thickness:2px}
+
+/* Project index — doubles as navigation */
+.index{
+  margin-top:3rem;
+  border-top:var(--rule);
+}
+.index a{
+  display:flex;
+  align-items:baseline;
+  gap:1rem;
+  padding:.85rem 0;
+  border-bottom:var(--rule);
+  text-decoration:none;
+  transition:padding-left .18s ease;
+}
+.index a:hover{padding-left:.6rem}
+.index .dot{
+  width:.72rem;height:.72rem;border-radius:50%;
+  background:var(--accent);flex:none;
+  transform:translateY(-.05rem);
+}
+.index .nm{font-weight:600}
+.index .kind{
+  margin-left:auto;
+  color:var(--muted);
+  font-size:.85rem;
+  text-align:right;
+}
+
+/* ============================================================
+   3. PROJECTS
+   ============================================================ */
+.work{padding-block:clamp(2rem,5vw,3.5rem)}
+
+.project{
+  --accent:#2A3DD1;
+  --tint:#DCE3FF;
+  background:var(--tint);
+  border-radius:1.5rem;
+  padding:clamp(1.5rem,4vw,3rem);
+  margin-bottom:clamp(1.25rem,3vw,2rem);
+  scroll-margin-top:1.5rem;
+}
+
+.project-grid{
+  display:grid;
+  gap:clamp(1.5rem,4vw,3rem);
+  grid-template-columns:1fr;
+  align-items:start;
+}
+@media (min-width:60rem){
+  .project-grid{grid-template-columns:1.15fr .85fr}
+}
+
+/* Image slot: shows a labelled placeholder until you add a file */
+.shot{
+  position:relative;
+  aspect-ratio:16/10;
+  border-radius:.9rem;
+  overflow:hidden;
+  background:var(--panel);
+  border:1px dashed rgba(0,0,0,.18);
+  display:grid;
+  place-items:center;
+}
+.shot img{width:100%;height:100%;object-fit:cover}
+.shot .hint{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  padding:1.5rem;
+  font-size:.85rem;
+  color:var(--muted);
+  line-height:1.5;
+}
+.shot img[src]:not([src=""]){position:relative;z-index:1}
+
+.project h2{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:clamp(1.75rem,1.2rem + 1.8vw,2.75rem);
+  line-height:1.02;
+  letter-spacing:-.025em;
+  margin:0 0 .35rem;
+}
+.kindline{
+  color:var(--accent);
+  font-weight:600;
+  font-size:.95rem;
+  margin:0 0 1.25rem;
+}
+.role{
+  display:inline-block;
+  background:var(--accent);
+  color:#fff;
+  font-size:.82rem;
+  font-weight:600;
+  padding:.3rem .7rem;
+  border-radius:999px;
+  margin-bottom:1rem;
+}
+.project p{max-width:var(--measure);margin:0 0 1rem}
+.project p:last-of-type{margin-bottom:1.25rem}
+
+.tech{
+  display:flex;flex-wrap:wrap;gap:.4rem;
+  list-style:none;padding:0;margin:0 0 1.25rem;
+}
+.tech li{
+  background:var(--panel);
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:.4rem;
+  padding:.22rem .55rem;
+  font-size:.82rem;
+}
+
+.golink{
+  display:inline-block;
+  font-weight:600;
+  color:var(--accent);
+  text-decoration:underline;
+  text-underline-offset:4px;
+  text-decoration-thickness:2px;
+}
+
+.todo{
+  background:#FFF4C2;
+  border-left:4px solid #C79A00;
+  padding:.6rem .85rem;
+  font-size:.85rem;
+  border-radius:.3rem;
+  margin:0 0 1rem;
+}
+
+/* ============================================================
+   4. SKILLS / EDUCATION / CONTACT
+   ============================================================ */
+.band{padding-block:clamp(3rem,7vw,5rem);border-top:var(--rule)}
+
+.band h2{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:clamp(1.6rem,1.2rem + 1.4vw,2.4rem);
+  letter-spacing:-.022em;
+  margin:0 0 2rem;
+}
+
+.cols{
+  display:grid;
+  gap:2rem;
+  grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));
+}
+.cols h3{
+  font-size:.95rem;
+  font-weight:600;
+  margin:0 0 .6rem;
+  padding-bottom:.5rem;
+  border-bottom:2px solid var(--ink);
+}
+.cols ul{list-style:none;margin:0;padding:0}
+.cols li{padding:.2rem 0;color:var(--muted)}
+
+.edu{display:grid;gap:1.5rem;max-width:var(--measure)}
+.edu article{border-top:var(--rule);padding-top:1.1rem}
+.edu h3{font-size:1.15rem;margin:0 0 .2rem;font-weight:600}
+.edu .when{color:var(--muted);font-size:.9rem;margin:0 0 .5rem}
+.edu p{margin:0;color:var(--muted)}
+
+footer{
+  background:var(--ink);
+  color:var(--paper);
+  padding-block:clamp(3rem,7vw,5rem);
+}
+footer h2{
+  font-family:var(--display);
+  font-weight:800;
+  font-size:clamp(2rem,1.2rem + 3vw,4rem);
+  letter-spacing:-.03em;
+  line-height:1;
+  margin:0 0 1.75rem;
+}
+.links{display:grid;gap:.6rem;font-size:1.05rem}
+.links a{text-decoration:underline;text-underline-offset:4px;width:fit-content}
+footer small{display:block;margin-top:2.5rem;color:#9AA0AC;font-size:.82rem}
+
+/* One orchestrated entrance, hero only */
+@media (prefers-reduced-motion:no-preference){
+  .hero h1,.hero p,.meta,.index{animation:rise .7s cubic-bezier(.2,.7,.3,1) both}
+  .hero p{animation-delay:.07s}
+  .meta{animation-delay:.12s}
+  .index{animation-delay:.17s}
+}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+@media print{
+  .shot,.index{display:none}
+  body{background:#fff}
+  .project{background:#fff;border:1px solid #ccc}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ============================================================
+     HERO — edit the headline, the sentence, and your links
+     ============================================================ -->
+<header class="hero wrap">
+  <h1>Andrea Lecini</h1>
+  <p>I build interactive systems: game mechanics, real-time environments, and characters driven by language models.</p>
+
+  <div class="meta">
+    <span>Computer Engineering, Politecnico di Torino</span>
+    <span>Turin &amp; Liguria, Italy</span>
+    <a href="mailto:leciniandrea53@gmail.com">leciniandrea53@gmail.com</a>
+    <a href="https://www.linkedin.com/in/andrea-lecini-26390b431">LinkedIn</a>
+    <a href="https://github.com/AndreaLecini">GitHub</a>
+  </div>
+
+  <!-- Index: one line per project. Add a line when you add a project. -->
+  <nav class="index" aria-label="Projects">
+    <a href="#belief-state" style="--accent:#2A3DD1">
+      <span class="dot"></span><span class="nm">Belief State</span>
+      <span class="kind">Master's thesis — LLM-driven characters</span>
+    </a>
+    <a href="#environment" style="--accent:#0E8A63">
+      <span class="dot"></span><span class="nm">[Project name]</span>
+      <span class="kind">Real-time environment — Unreal Engine 5</span>
+    </a>
+    <a href="#core-protocol" style="--accent:#5B3FD4">
+      <span class="dot"></span><span class="nm">Core Protocol</span>
+      <span class="kind">2D platformer</span>
+    </a>
+    <a href="#the-man-i-was" style="--accent:#C6395A">
+      <span class="dot"></span><span class="nm">The Man I Was</span>
+      <span class="kind">VR experience</span>
+    </a>
+    <a href="#pumpkin" style="--accent:#D16A10">
+      <span class="dot"></span><span class="nm">Pumpkin</span>
+      <span class="kind">3D animated short film</span>
+    </a>
+  </nav>
+</header>
+
+<main>
+<section class="work wrap" aria-label="Selected work">
+
+<!-- ============================================================
+     ▼▼ COPY FROM HERE ▼▼  to add a new project
+     Change: id, --accent, --tint, image file, title, kind, role,
+     text, tech list, link. Then add a matching line to the index.
+     ============================================================ -->
+<article class="project" id="belief-state" style="--accent:#2A3DD1;--tint:#DCE3FF">
+  <div class="project-grid">
+    <figure class="shot" style="margin:0">
+      <span class="hint">Add <code>assets/belief-state.jpg</code><br>— a diagram of the graph works well here</span>
+      <img src="assets/belief-state.jpg" alt="Diagram of the belief-state graph" onerror="this.remove()">
+    </figure>
+    <div>
+      <h2>Belief State</h2>
+      <p class="kindline">Master's thesis — LLM-driven characters</p>
+      <span class="role">Researcher &amp; Developer</span>
+
+      <p>Belief State gives non-player characters a persistent, structured memory of what they know. Instead of relying on prompting alone, each character's knowledge is held in a graph that updates as the story unfolds, and every line the language model generates is constrained to that state.</p>
+
+      <p>The result is characters who remember what they have been told, stay consistent across long conversations, and stop inventing events that never happened. Against a prompting-only baseline, the approach improved narrative coherence and believability by 28%.</p>
+
+      <ul class="tech">
+        <li>Python</li><li>LangChain</li><li>LangGraph</li><li>Graph data structures</li>
+      </ul>
+    </div>
+  </div>
+</article>
+<!-- ▲▲ COPY TO HERE ▲▲ -->
+
+<article class="project" id="environment" style="--accent:#0E8A63;--tint:#D9F0E6">
+  <div class="project-grid">
+    <figure class="shot" style="margin:0">
+      <span class="hint">Add <code>assets/environment.jpg</code><br>— your best in-engine render</span>
+      <img src="assets/environment.jpg" alt="Real-time environment rendered in Unreal Engine 5" onerror="this.remove()">
+    </figure>
+    <div>
+      <h2>[Project name]</h2>
+      <p class="kindline">Real-time environment — Unreal Engine 5</p>
+      <span class="role">Technical Artist &amp; Environment Developer</span>
+
+      <p class="todo">Replace the name above and the first sentence below with what the environment actually is and why it was chosen.</p>
+
+      <p>A real-time environment built to see how far photorealism can be pushed while staying fully interactive. Geometry runs on Nanite and lighting on Lumen, so the scene keeps its full detail and dynamic global illumination without baking.</p>
+
+      <p>Parts of the environment were reconstructed from real-world captures through photogrammetry and Gaussian splatting, then integrated with authored assets. Characters were built with MetaHuman and animated for a set of cinematic sequences, with Niagara driving the atmospheric effects.</p>
+
+      <ul class="tech">
+        <li>Unreal Engine 5</li><li>Nanite</li><li>Lumen</li><li>Niagara</li><li>MetaHuman</li><li>Sequencer</li><li>Photogrammetry</li><li>Gaussian splatting</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="project" id="core-protocol" style="--accent:#5B3FD4;--tint:#E3DCFB">
+  <div class="project-grid">
+    <figure class="shot" style="margin:0">
+      <span class="hint">Add <code>assets/core-protocol.jpg</code><br>— a gameplay screenshot</span>
+      <img src="assets/core-protocol.jpg" alt="Gameplay screenshot from Core Protocol" onerror="this.remove()">
+    </figure>
+    <div>
+      <h2>Core Protocol</h2>
+      <p class="kindline">2D platformer — Unity</p>
+      <span class="role">Game Designer &amp; Developer</span>
+
+      <p>A small robot is sent across a solar system to find out what happened to the explorers who went missing on its planets. The player explores, works past environmental obstacles, and collects the components and information needed to reconstruct the events.</p>
+
+      <p>On the engineering side: a movement and physics system that changes behaviour under multiple conditions, a character state machine, and dialogue and quest systems. On the production side: timeline and milestones, playtesting and balancing against tester feedback, the trailer, and a market analysis with sales projections.</p>
+
+      <p>The playable demo was presented to the public at Torino Comics, April–May 2026.</p>
+
+      <ul class="tech">
+        <li>Unity</li><li>C#</li><li>Game design</li><li>Production pipeline</li>
+      </ul>
+
+      <!-- Add the trailer or itch.io link here and delete the note -->
+      <p class="todo">Add the trailer or build link — this is the project a recruiter will most want to try.</p>
+    </div>
+  </div>
+</article>
+
+<article class="project" id="the-man-i-was" style="--accent:#C6395A;--tint:#FFE1E6">
+  <div class="project-grid">
+    <figure class="shot" style="margin:0">
+      <span class="hint">Add <code>assets/the-man-i-was.jpg</code></span>
+      <img src="assets/the-man-i-was.jpg" alt="Scene from The Man I Was" onerror="this.remove()">
+    </figure>
+    <div>
+      <h2>The Man I Was</h2>
+      <p class="kindline">VR experience</p>
+      <span class="role">Game Designer &amp; Developer</span>
+
+      <p>A virtual reality experience that places the user in the position of a man diagnosed with Alzheimer's disease. It explores the progressive loss of memory and the confusion that comes with it, using the language of games to build empathy and raise awareness.</p>
+
+      <ul class="tech">
+        <li>Unity</li><li>VR</li><li>Interaction design</li>
+      </ul>
+
+      <a class="golink" href="#" >Play it on itch.io</a>
+      <p class="todo">Paste the real itch.io URL into the link above.</p>
+    </div>
+  </div>
+</article>
+
+<article class="project" id="pumpkin" style="--accent:#D16A10;--tint:#FFE6CC">
+  <div class="project-grid">
+    <figure class="shot" style="margin:0">
+      <span class="hint">Add <code>assets/pumpkin.jpg</code><br>— or embed the film below</span>
+      <img src="assets/pumpkin.jpg" alt="Frame from the short film Pumpkin" onerror="this.remove()">
+    </figure>
+    <div>
+      <h2>Pumpkin</h2>
+      <p class="kindline">3D animated short film</p>
+      <span class="role">3D Animator &amp; Rigger</span>
+
+      <p>A pumpkin comes to life in a landscape of war and suffering and becomes a symbolic sentinel of hope. The film works through themes of resilience, loss and rebirth entirely in animation and visual storytelling.</p>
+
+      <ul class="tech">
+        <li>Blender</li><li>Rigging</li><li>Animation</li><li>After Effects</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+</section>
+
+<!-- ============================================================
+     SKILLS
+     ============================================================ -->
+<section class="band wrap" id="skills">
+  <h2>What I work with</h2>
+  <div class="cols">
+    <div>
+      <h3>Programming</h3>
+      <ul>
+        <li>Python</li><li>C, C++, C#</li><li>Java</li><li>JavaScript</li><li>HTML, CSS</li><li>SQL</li>
+      </ul>
+    </div>
+    <div>
+      <h3>AI and language models</h3>
+      <ul>
+        <li>LLM integration</li><li>LangChain, LangGraph</li><li>Prompt engineering</li><li>Agent memory and state</li><li>Retrieval-augmented generation</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Game development</h3>
+      <ul>
+        <li>Gameplay programming</li><li>Level design</li><li>UI systems</li><li>Dialogue systems</li><li>Playtesting and balancing</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Real-time 3D</h3>
+      <ul>
+        <li>Unreal Engine 5</li><li>Nanite, Lumen, Niagara</li><li>MetaHuman, Sequencer</li><li>Photogrammetry</li><li>Gaussian splatting</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Content and tools</h3>
+      <ul>
+        <li>Blender: modelling, texturing</li><li>Rigging and animation</li><li>Sound design</li><li>After Effects</li><li>Git</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     EDUCATION
+     ============================================================ -->
+<section class="band wrap" id="education">
+  <h2>Education</h2>
+  <div class="edu">
+    <article>
+      <h3>MSc in Computer Engineering (LM-32)</h3>
+      <p class="when">Politecnico di Torino · 2024–2026 · track in Engineering of Cinema and Digital Media</p>
+      <p>Thesis: <em>Belief State — a graph architecture for narrative coherence in LLM-driven NPCs</em>, supervised by Prof. Marco Mazzaglia.</p>
+    </article>
+    <article>
+      <h3>BSc in Computer Engineering (L-8)</h3>
+      <p class="when">Politecnico di Torino · 2021–2024 · 100/110</p>
+      <p>Foundations in algorithms and data structures, databases, operating systems, networks and object-oriented programming.</p>
+    </article>
+    <article>
+      <h3>English — IELTS Academic 8.0</h3>
+      <p class="when">2023</p>
+    </article>
+  </div>
+</section>
+</main>
+
+<!-- ============================================================
+     CONTACT
+     ============================================================ -->
+<footer id="contact">
+  <div class="wrap">
+    <h2>Let's talk.</h2>
+    <div class="links">
+      <a href="mailto:leciniandrea53@gmail.com">leciniandrea53@gmail.com</a>
+      <a href="tel:+393247759861">+39 324 775 9861</a>
+      <a href="https://www.linkedin.com/in/andrea-lecini-26390b431">linkedin.com/in/andrealecini</a>
+      <a href="https://github.com/AndreaLecini">github.com/AndreaLecini</a>
+      <a href="assets/CV_Andrea_Lecini.pdf">Download CV (PDF)</a>
+    </div>
+    <small>Turin &amp; Liguria, Italy — open to hybrid and remote roles across Europe.</small>
+  </div>
+</footer>
+
+</body>
+</html>
